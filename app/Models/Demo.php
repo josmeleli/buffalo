@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class localinsumo extends Model
+class Demo extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['id_local', 'id_insumo', 'stock'];
 }

@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de Stock</title>
     <link rel="stylesheet" href="{{asset('css/styles-demo.css')}}">
 </head>
+
 <body>
     <header>
         <div class="header-left">
-            <span>Martes 1 de Octubre</span>
-            <span>2:30 pm</span>
+            <span id="fecha-hora"></span>
         </div>
         <nav>
             <ul>
@@ -28,7 +29,7 @@
             <p>Av. Villareal 2012</p>
         </div>
         <div class="form-container">
-            <form>
+            <form id="stockForm">
                 <label for="tipoMovimiento">Selecciona Ingreso o Venta</label>
                 <select id="tipoMovimiento">
                     <option value="ingreso">Ingreso</option>
@@ -46,6 +47,7 @@
                     <option value="pierna_pollo">Pierna de Pollo</option>
                     <option value="pierna_res">Pierna de Res</option>
                     <option value="chuleta_cerdo">Chuleta de cerdo</option>
+                    <option value="chorizos">Chorizos</option>
                 </select>
 
                 <label for="cantidad">Cantidad</label>
@@ -69,24 +71,31 @@
                 <tbody>
                     <tr>
                         <td>Pierna de Pollo</td>
-                        <td>50</td>
-                        <td>10</td>
-                        <td>10</td>
-                        <td>50</td>
+                        <td id="stock-inicial-pollo">50</td>
+                        <td id="ingresos-pollo">10</td>
+                        <td id="ventas-pollo">10</td>
+                        <td id="stock-final-pollo">50</td>
                     </tr>
                     <tr>
                         <td>Pierna de Res</td>
-                        <td>10</td>
-                        <td>10</td>
-                        <td>15</td>
-                        <td>5</td>
+                        <td id="stock-inicial-res">10</td>
+                        <td id="ingresos-res">10</td>
+                        <td id="ventas-res">15</td>
+                        <td id="stock-final-res">5</td>
                     </tr>
                     <tr>
                         <td>Chuleta de cerdo</td>
-                        <td>20</td>
-                        <td>10</td>
-                        <td>2</td>
-                        <td>28</td>
+                        <td id="stock-inicial-cerdo">20</td>
+                        <td id="ingresos-cerdo">10</td>
+                        <td id="ventas-cerdo">2</td>
+                        <td id="stock-final-cerdo">28</td>
+                    </tr>
+                    <tr>
+                        <td>Chorizos</td>
+                        <td id="stock-inicial-chorizos">100</td>
+                        <td id="ingresos-chorizos">10</td>
+                        <td id="ventas-chorizos">5</td>
+                        <td id="stock-final-chorizos">105</td>
                     </tr>
                 </tbody>
             </table>
@@ -97,5 +106,154 @@
             <p>¡Alerta! El stock de <strong>"Pierna de Res"</strong> está bajo</p>
         </div>
     </main>
+
+    <script>
+        // Mostrar la fecha y hora dinámica
+        document.getElementById('fecha-hora').textContent = new Date().toLocaleString('es-ES', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        // Función para guardar el stock en localStorage
+        function guardarStockEnLocalStorage(producto, stockInicial, ingresos, ventas, stockFinal) {
+            const stockData = {
+                stockInicial: parseInt(stockInicial.textContent),
+                ingresos: parseInt(ingresos.textContent),
+                ventas: parseInt(ventas.textContent),
+                stockFinal: parseInt(stockFinal.textContent)
+            };
+            localStorage.setItem(producto, JSON.stringify(stockData));
+        }
+
+        // Función para cargar el stock desde localStorage
+        function cargarStockDesdeLocalStorage(producto, stockInicial, ingresos, ventas, stockFinal) {
+            const stockData = JSON.parse(localStorage.getItem(producto));
+            if (stockData) {
+                stockInicial.textContent = stockData.stockInicial;
+                ingresos.textContent = stockData.ingresos;
+                ventas.textContent = stockData.ventas;
+                stockFinal.textContent = stockData.stockFinal;
+            }
+        }
+
+        // Referencias a los elementos de la tabla
+        const stockPollo = {
+            stockInicial: document.getElementById('stock-inicial-pollo'),
+            ingresos: document.getElementById('ingresos-pollo'),
+            ventas: document.getElementById('ventas-pollo'),
+            stockFinal: document.getElementById('stock-final-pollo')
+        };
+        const stockRes = {
+            stockInicial: document.getElementById('stock-inicial-res'),
+            ingresos: document.getElementById('ingresos-res'),
+            ventas: document.getElementById('ventas-res'),
+            stockFinal: document.getElementById('stock-final-res')
+        };
+        const stockCerdo = {
+            stockInicial: document.getElementById('stock-inicial-cerdo'),
+            ingresos: document.getElementById('ingresos-cerdo'),
+            ventas: document.getElementById('ventas-cerdo'),
+            stockFinal: document.getElementById('stock-final-cerdo')
+        };
+        const stockChorizos = {
+            stockInicial: document.getElementById('stock-inicial-chorizos'),
+            ingresos: document.getElementById('ingresos-chorizos'),
+            ventas: document.getElementById('ventas-chorizos'),
+            stockFinal: document.getElementById('stock-final-chorizos')
+        };
+
+        // Cargar el stock al inicio
+        cargarStockDesdeLocalStorage('pierna_pollo', stockPollo.stockInicial, stockPollo.ingresos, stockPollo.ventas, stockPollo.stockFinal);
+        cargarStockDesdeLocalStorage('pierna_res', stockRes.stockInicial, stockRes.ingresos, stockRes.ventas, stockRes.stockFinal);
+        cargarStockDesdeLocalStorage('chuleta_cerdo', stockCerdo.stockInicial, stockCerdo.ingresos, stockCerdo.ventas, stockCerdo.stockFinal);
+        cargarStockDesdeLocalStorage('chorizos', stockChorizos.stockInicial, stockChorizos.ingresos, stockChorizos.ventas, stockChorizos.stockFinal);
+
+        // Actualización de stock y almacenamiento en localStorage
+        document.getElementById('stockForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const tipoMovimiento = document.getElementById('tipoMovimiento').value;
+            const producto = document.getElementById('producto').value;
+            const cantidad = parseInt(document.getElementById('cantidad').value);
+
+            let stockInicial, ingresos, ventas, stockFinal;
+
+            if (producto === 'chuleta_cerdo') {
+                stockInicial = stockCerdo.stockInicial;
+                ingresos = stockCerdo.ingresos;
+                ventas = stockCerdo.ventas;
+                stockFinal = stockCerdo.stockFinal;
+            } else if (producto === 'pierna_pollo') {
+                stockInicial = stockPollo.stockInicial;
+                ingresos = stockPollo.ingresos;
+                ventas = stockPollo.ventas;
+                stockFinal = stockPollo.stockFinal;
+            } else if (producto === 'pierna_res') {
+                stockInicial = stockRes.stockInicial;
+                ingresos = stockRes.ingresos;
+                ventas = stockRes.ventas;
+                stockFinal = stockRes.stockFinal;
+            } else if (producto === 'chorizos') {
+                stockInicial = stockChorizos.stockInicial;
+                ingresos = stockChorizos.ingresos;
+                ventas = stockChorizos.ventas;
+                stockFinal = stockChorizos.stockFinal;
+            }
+
+            if (tipoMovimiento === 'ingreso') {
+                ingresos.textContent = parseInt(ingresos.textContent) + cantidad;
+                stockFinal.textContent = parseInt(stockFinal.textContent) + cantidad;
+            } else if (tipoMovimiento === 'venta') {
+                ventas.textContent = parseInt(ventas.textContent) + cantidad;
+                stockFinal.textContent = parseInt(stockFinal.textContent) - cantidad;
+            }
+
+            guardarStockEnLocalStorage(producto, stockInicial, ingresos, ventas, stockFinal);
+        });
+
+        // Cambia las opciones del select cuando se selecciona "Plato"
+        const tipoRadios = document.querySelectorAll('input[name="tipo"]');
+        const productoSelect = document.getElementById('producto');
+
+        tipoRadios.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                if (radio.value === 'plato') {
+                    productoSelect.innerHTML = `
+                        <option value="porcion_chorizo_x3">Porción de chorizo x3</option>
+                    `;
+                } else {
+                    productoSelect.innerHTML = `
+                        <option value="pierna_pollo">Pierna de Pollo</option>
+                        <option value="pierna_res">Pierna de Res</option>
+                        <option value="chuleta_cerdo">Chuleta de cerdo</option>
+                        <option value="chorizos">Chorizos</option>
+                    `;
+                }
+            });
+        });
+
+        // Actualiza stock de chorizos si se selecciona "Porción de chorizo x3"
+        document.getElementById('stockForm').addEventListener('submit', function (event) {
+            const producto = document.getElementById('producto').value;
+            const cantidad = parseInt(document.getElementById('cantidad').value);
+
+            if (producto === 'porcion_chorizo_x3') {
+                const chorizosNecesarios = cantidad * 3;
+
+                if (parseInt(stockChorizos.stockFinal.textContent) >= chorizosNecesarios) {
+                    stockChorizos.ventas.textContent = parseInt(stockChorizos.ventas.textContent) + chorizosNecesarios;
+                    stockChorizos.stockFinal.textContent = parseInt(stockChorizos.stockFinal.textContent) - chorizosNecesarios;
+                    guardarStockEnLocalStorage('chorizos', stockChorizos.stockInicial, stockChorizos.ingresos, stockChorizos.ventas, stockChorizos.stockFinal);
+                } else {
+                    alert('No hay suficiente stock de chorizos.');
+                    event.preventDefault(); // Evita que el formulario se procese si no hay stock suficiente
+                }
+            }
+        });
+    </script>
 </body>
+
 </html>

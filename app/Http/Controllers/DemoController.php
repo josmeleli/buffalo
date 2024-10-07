@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\insumo;
 use App\Models\local;
+use App\Models\platos;
 use Illuminate\Http\Request;
 
 class DemoController extends Controller
 {
     function index(){
         $insumos = insumo::all();
-        return view('Demo.index', compact('insumos'));
+        $platos = platos::all();
+        return view('Demo.index', compact('insumos', 'platos'));
     }
 
 

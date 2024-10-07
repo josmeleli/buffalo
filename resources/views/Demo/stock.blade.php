@@ -61,6 +61,27 @@
                 <button type="submit">Guardar</button>
             </form>
         </div>
+
+        <div class="form-container">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-error">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <form action="{{ route('platos.store') }}" method="POST">
+                @csrf
+                <label for="nombre">Nombre de Platos</label>
+                <input type="text" id="nombre" name="nombre">
+                <button type="submit">Guardar</button>
+            </form>
+        </div>
     </main>
 </body>
 

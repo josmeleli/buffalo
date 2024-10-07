@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de Stock</title>
-    <link rel="stylesheet" href="{{asset('css/styles-demo.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/styles-demo.css') }}">
 </head>
 
 <body>
@@ -38,20 +38,18 @@
 
                 <label for="tipoItem">Selecciona el tipo</label>
                 <div class="radio-buttons" style="display: inline-block;">
-                <label style="display: inline-block; align-items: center; margin-bottom: 5px;">
-                    <input type="radio" name="tipo" value="insumo" checked style="margin-right: 10px;"> Insumo
-                </label>
-                <label style="display: inline-block; align-items: center; margin-bottom: 5px;">
-                    <input type="radio" name="tipo" value="plato" style="margin-right: 10px;"> Plato
-                </label>
-            </div>
-
+                    <label style="display: inline-block; align-items: center; margin-bottom: 5px;">
+                        <input type="radio" name="tipo" value="insumo" checked style="margin-right: 10px;"> Insumo
+                    </label>
+                    <label style="display: inline-block; align-items: center; margin-bottom: 5px;">
+                        <input type="radio" name="tipo" value="plato" style="margin-right: 10px;"> Plato
+                    </label>
+                </div>
                 <label for="producto">Producto</label>
-                <select id="producto">
-                    <option value="pierna_pollo">Pierna de Pollo</option>
-                    <option value="pierna_res">Pierna de Res</option>
-                    <option value="chuleta_cerdo">Chuleta de cerdo</option>
-                    <option value="chorizos">Chorizos</option>
+                <select id="producto" name="producto">
+                    @foreach ($insumos as $insumo)
+                        <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
+                    @endforeach
                 </select>
 
                 <label for="cantidad">Cantidad</label>
@@ -212,10 +210,14 @@
         };
 
         // Cargar el stock al inicio
-        cargarStockDesdeLocalStorage('pierna_pollo', stockPollo.stockInicial, stockPollo.ingresos, stockPollo.ventas, stockPollo.stockFinal);
-        cargarStockDesdeLocalStorage('pierna_res', stockRes.stockInicial, stockRes.ingresos, stockRes.ventas, stockRes.stockFinal);
-        cargarStockDesdeLocalStorage('chuleta_cerdo', stockCerdo.stockInicial, stockCerdo.ingresos, stockCerdo.ventas, stockCerdo.stockFinal);
-        cargarStockDesdeLocalStorage('chorizos', stockChorizos.stockInicial, stockChorizos.ingresos, stockChorizos.ventas, stockChorizos.stockFinal);
+        cargarStockDesdeLocalStorage('pierna_pollo', stockPollo.stockInicial, stockPollo.ingresos, stockPollo.ventas,
+            stockPollo.stockFinal);
+        cargarStockDesdeLocalStorage('pierna_res', stockRes.stockInicial, stockRes.ingresos, stockRes.ventas, stockRes
+            .stockFinal);
+        cargarStockDesdeLocalStorage('chuleta_cerdo', stockCerdo.stockInicial, stockCerdo.ingresos, stockCerdo.ventas,
+            stockCerdo.stockFinal);
+        cargarStockDesdeLocalStorage('chorizos', stockChorizos.stockInicial, stockChorizos.ingresos, stockChorizos.ventas,
+            stockChorizos.stockFinal);
 
         // Actualización de stock y almacenamiento en localStorage
         document.getElementById('stockForm').addEventListener('submit', function(event) {
@@ -268,14 +270,21 @@
             radio.addEventListener('change', function() {
                 if (radio.value === 'plato') {
                     productoSelect.innerHTML = `
-                        <option value="porcion_chorizo_x3">Porción de chorizo x3</option>
-                    `;
+        <label for="producto">Producto</label>
+        <select id="producto" name="producto">
+            @foreach ($platos as $plato)
+                <option value="{{ $plato->id }}">{{ $plato->nombre }}</option>
+            @endforeach
+        </select>
+    `;
                 } else {
                     productoSelect.innerHTML = `
-                        <option value="pierna_pollo">Pierna de Pollo</option>
-                        <option value="pierna_res">Pierna de Res</option>
-                        <option value="chuleta_cerdo">Chuleta de cerdo</option>
-                        <option value="chorizos">Chorizos</option>
+                        <label for="producto">Producto</label>
+        <select id="producto" name="producto">
+            @foreach ($insumos as $insumo)
+                <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
+            @endforeach
+        </select>
                     `;
                 }
             });
@@ -290,9 +299,12 @@
                 const chorizosNecesarios = cantidad * 3;
 
                 if (parseInt(stockChorizos.stockFinal.textContent) >= chorizosNecesarios) {
-                    stockChorizos.ventas.textContent = parseInt(stockChorizos.ventas.textContent) + chorizosNecesarios;
-                    stockChorizos.stockFinal.textContent = parseInt(stockChorizos.stockFinal.textContent) - chorizosNecesarios;
-                    guardarStockEnLocalStorage('chorizos', stockChorizos.stockInicial, stockChorizos.ingresos, stockChorizos.ventas, stockChorizos.stockFinal);
+                    stockChorizos.ventas.textContent = parseInt(stockChorizos.ventas.textContent) +
+                        chorizosNecesarios;
+                    stockChorizos.stockFinal.textContent = parseInt(stockChorizos.stockFinal.textContent) -
+                        chorizosNecesarios;
+                    guardarStockEnLocalStorage('chorizos', stockChorizos.stockInicial, stockChorizos.ingresos,
+                        stockChorizos.ventas, stockChorizos.stockFinal);
                 } else {
                     alert('No hay suficiente stock de chorizos.');
                     event.preventDefault(); // Evita que el formulario se procese si no hay stock suficiente

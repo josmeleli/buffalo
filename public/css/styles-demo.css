@@ -16,6 +16,7 @@ header {
     background-color: #d49a8f;
     color: white;
     padding: 10px 20px;
+    min-height: 50px;
 }
 
 .header-left span {

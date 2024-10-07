@@ -37,10 +37,14 @@
                 </select>
 
                 <label for="tipoItem">Selecciona el tipo</label>
-                <div class="radio-buttons">
-                    <label><input type="radio" name="tipo" value="insumo" checked> Insumo</label>
-                    <label><input type="radio" name="tipo" value="plato"> Plato</label>
-                </div>
+                <div class="radio-buttons" style="display: inline-block;">
+                <label style="display: inline-block; align-items: center; margin-bottom: 5px;">
+                    <input type="radio" name="tipo" value="insumo" checked style="margin-right: 10px;"> Insumo
+                </label>
+                <label style="display: inline-block; align-items: center; margin-bottom: 5px;">
+                    <input type="radio" name="tipo" value="plato" style="margin-right: 10px;"> Plato
+                </label>
+            </div>
 
                 <label for="producto">Producto</label>
                 <select id="producto">
@@ -102,8 +106,9 @@
             <a href="#">Ver tabla completa</a>
         </div>
 
-        <div class="alerta">
-            <p>¡Alerta! El stock de <strong>"Pierna de Res"</strong> está bajo</p>
+        <div class="alerta" style="display: none;">
+
+            <div id="alertas-stock-bajo"></div> <!-- Contenedor para múltiples alertas -->
         </div>
     </main>
 
@@ -126,6 +131,47 @@
                 stockFinal: parseInt(stockFinal.textContent)
             };
             localStorage.setItem(producto, JSON.stringify(stockData));
+        }
+
+        // Define el límite de stock bajo
+        const LIMITE_STOCK_BAJO = 5;
+
+        // Función para verificar el stock y mostrar la alerta
+        function verificarStockBajo() {
+            const insumos = [{
+                    nombre: "Pierna de Pollo",
+                    stockFinal: parseInt(stockPollo.stockFinal.textContent)
+                },
+                {
+                    nombre: "Pierna de Res",
+                    stockFinal: parseInt(stockRes.stockFinal.textContent)
+                },
+                {
+                    nombre: "Chuleta de cerdo",
+                    stockFinal: parseInt(stockCerdo.stockFinal.textContent)
+                },
+                {
+                    nombre: "Chorizos",
+                    stockFinal: parseInt(stockChorizos.stockFinal.textContent)
+                }
+            ];
+
+            const alertasDiv = document.getElementById('alertas-stock-bajo');
+            alertasDiv.innerHTML = ''; // Limpiar alertas anteriores
+
+            let stockBajo = insumos.filter(insumo => insumo.stockFinal <= LIMITE_STOCK_BAJO);
+
+            const alertaDiv = document.querySelector('.alerta');
+            if (stockBajo.length > 0) {
+                alertaDiv.style.display = 'block'; // Muestra el div de alerta
+                stockBajo.forEach(insumo => {
+                    const mensajeAlerta = document.createElement('div');
+                    mensajeAlerta.textContent = `${insumo.nombre} tiene stock bajo.`;
+                    alertasDiv.appendChild(mensajeAlerta); // Agrega cada insumo bajo al contenedor
+                });
+            } else {
+                alertaDiv.style.display = 'none'; // Oculta el div de alerta si no hay stock bajo
+            }
         }
 
         // Función para cargar el stock desde localStorage
@@ -172,7 +218,7 @@
         cargarStockDesdeLocalStorage('chorizos', stockChorizos.stockInicial, stockChorizos.ingresos, stockChorizos.ventas, stockChorizos.stockFinal);
 
         // Actualización de stock y almacenamiento en localStorage
-        document.getElementById('stockForm').addEventListener('submit', function (event) {
+        document.getElementById('stockForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
             const tipoMovimiento = document.getElementById('tipoMovimiento').value;
@@ -218,8 +264,8 @@
         const tipoRadios = document.querySelectorAll('input[name="tipo"]');
         const productoSelect = document.getElementById('producto');
 
-        tipoRadios.forEach(function (radio) {
-            radio.addEventListener('change', function () {
+        tipoRadios.forEach(function(radio) {
+            radio.addEventListener('change', function() {
                 if (radio.value === 'plato') {
                     productoSelect.innerHTML = `
                         <option value="porcion_chorizo_x3">Porción de chorizo x3</option>
@@ -236,7 +282,7 @@
         });
 
         // Actualiza stock de chorizos si se selecciona "Porción de chorizo x3"
-        document.getElementById('stockForm').addEventListener('submit', function (event) {
+        document.getElementById('stockForm').addEventListener('submit', function(event) {
             const producto = document.getElementById('producto').value;
             const cantidad = parseInt(document.getElementById('cantidad').value);
 
@@ -252,6 +298,7 @@
                     event.preventDefault(); // Evita que el formulario se procese si no hay stock suficiente
                 }
             }
+            verificarStockBajo();
         });
     </script>
 </body>

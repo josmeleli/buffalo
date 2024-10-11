@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('platoinsumos', function (Blueprint $table) {
+        Schema::create('movimientos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_insumo')->references('id')->on('insumos');
-            $table->foreignId('id_plato')->references('id')->on('platos');
-            $table->integer('cantidad_insumo');
+            $table->foreignId('insumo_id')->constrained()->onDelete('cascade');
+            $table->enum('tipo', ['ingreso', 'venta']);
+            $table->integer('cantidad');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('platoinsumos');
+        Schema::dropIfExists('movimientos');
     }
 };

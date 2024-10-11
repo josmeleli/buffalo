@@ -5,6 +5,7 @@ use App\Http\Controllers\InsumoController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\LocalInsumoController;
 use App\Http\Controllers\PlatosController;
+use App\Http\Controllers\StockController;
 
 Route::get('/', function () {
     return view('Auth.login');
@@ -33,3 +34,10 @@ Route::get('/demo/stock', [DemoController::class, 'stock'])->name('demo-stock.in
 Route::post('/demo/localinsumos', [LocalInsumoController::class, 'store'])->name('localinsumos.store');
 
 Route::post('/demo/platos', [PlatosController::class, 'store'])->name('platos.store');
+
+Route::get('/obtener-productos', [DemoController::class, 'obtenerProductos']);
+
+
+
+Route::get('/demo/stock', [StockController::class, 'index']);
+Route::post('/demo/stock/actualizar', [StockController::class, 'actualizarStock'])->name('actualizar.stock');

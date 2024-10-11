@@ -27,36 +27,33 @@
     <main>
         <div class="form-container">
             @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
             @endif
 
             @if(session('error'))
-                <div class="alert alert-error">
-                    {{ session('error') }}
-                </div>
+            <div class="alert alert-error">
+                {{ session('error') }}
+            </div>
             @endif
-
-            <form action="{{ route('localinsumos.store') }}" method="POST">
+            <h4>registra insumos</h4><br>
+            <form action="{{ route('insumos.store') }}" method="POST">
                 @csrf
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" required>
 
-                <label for="local">Local</label>
-                <select id="local" name="id_local">
-                    @foreach($locals as $local)
-                    <option value="{{ $local->id }}">{{ $local->nombre }} {{ $local->direccion }}</option>
-                    @endforeach
-                </select>
+                <label for="precocido">Precocido</label>
+                <input type="number" id="precocido" name="precocido" value="0" required>
 
-                <label for="insumo">Insumo</label>
-                <select id="insumo" name="id_insumo">
-                    @foreach($insumos as $insumo)
-                    <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
-                    @endforeach
-                </select>
+                <label for="proporcion">Proporción</label>
+                <input type="number" id="proporcion" name="proporcion" value="1" required>
 
-                <label for="cantidad">Stock</label>
-                <input type="number" id="cantidad" name="stock" value="1" min="1">
+                <label for="stock_inicial">Stock Inicial</label>
+                <input type="number" id="stock_inicial" name="stock_inicial" value="0" required>
+
+                <label for="stock">Stock</label>
+                <input type="number" id="stock" name="stock" value="0" required>
 
                 <button type="submit">Guardar</button>
             </form>
@@ -64,15 +61,15 @@
 
         <div class="form-container">
             @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
             @endif
 
             @if(session('error'))
-                <div class="alert alert-error">
-                    {{ session('error') }}
-                </div>
+            <div class="alert alert-error">
+                {{ session('error') }}
+            </div>
             @endif
 
             <form action="{{ route('platos.store') }}" method="POST">

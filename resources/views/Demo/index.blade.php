@@ -18,7 +18,7 @@
                 <li><a href="#">INICIO</a></li>
                 <li><a href="/demo/stock">CONTROL DE STOCK</a></li>
                 <li><a href="#">REPORTES DE STOCK</a></li>
-                <li><a href="#">CONFIGURACION</a></li>
+                <li><a href="#">CONFIGURACIÓN</a></li>
             </ul>
         </nav>
     </header>
@@ -29,9 +29,15 @@
             <p>Av. Villareal 2012</p>
         </div>
         <div class="form-container">
-            <form id="stockForm">
+            @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
+            <form action="{{ route('actualizar.stock') }}" method="POST">
+                @csrf
                 <label for="tipoMovimiento">Selecciona Ingreso o Venta</label>
-                <select id="tipoMovimiento">
+                <select id="tipoMovimiento" name="tipoMovimiento">
                     <option value="ingreso">Ingreso</option>
                     <option value="venta">Venta</option>
                 </select>
@@ -45,15 +51,22 @@
                         <input type="radio" name="tipo" value="plato" style="margin-right: 10px;"> Plato
                     </label>
                 </div>
+
                 <label for="producto">Producto</label>
                 <select id="producto" name="producto">
-                    @foreach ($insumos as $insumo)
-                        <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
+                    @if($tipo === 'plato')
+                    @foreach ($platos as $plato)
+                    <option value="{{ $plato->id }}">{{ $plato->nombre }}</option>
                     @endforeach
+                    @else
+                    @foreach ($insumos as $insumo)
+                    <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
+                    @endforeach
+                    @endif
                 </select>
 
                 <label for="cantidad">Cantidad</label>
-                <input type="number" id="cantidad" value="1" min="1">
+                <input type="number" id="cantidad" name="cantidad" value="1" min="1">
 
                 <button type="submit">Actualizar</button>
             </form>
@@ -71,42 +84,21 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($insumos as $insumo)
                     <tr>
-                        <td>Pierna de Pollo</td>
-                        <td id="stock-inicial-pollo">50</td>
-                        <td id="ingresos-pollo">10</td>
-                        <td id="ventas-pollo">10</td>
-                        <td id="stock-final-pollo">50</td>
+                        <td>{{ $insumo->nombre }}</td>
+                        <td>{{ $insumo->stock_inicial }}</td>
+                        <td>{{ $insumo->ingresos }}</td>
+                        <td>{{ $insumo->ventas }}</td>
+                        <td>{{ $insumo->stock_final }}</td>
                     </tr>
-                    <tr>
-                        <td>Pierna de Res</td>
-                        <td id="stock-inicial-res">10</td>
-                        <td id="ingresos-res">10</td>
-                        <td id="ventas-res">15</td>
-                        <td id="stock-final-res">5</td>
-                    </tr>
-                    <tr>
-                        <td>Chuleta de cerdo</td>
-                        <td id="stock-inicial-cerdo">20</td>
-                        <td id="ingresos-cerdo">10</td>
-                        <td id="ventas-cerdo">2</td>
-                        <td id="stock-final-cerdo">28</td>
-                    </tr>
-                    <tr>
-                        <td>Chorizos</td>
-                        <td id="stock-inicial-chorizos">100</td>
-                        <td id="ingresos-chorizos">10</td>
-                        <td id="ventas-chorizos">5</td>
-                        <td id="stock-final-chorizos">105</td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
-            <a href="#">Ver tabla completa</a>
         </div>
 
         <div class="alerta" style="display: none;">
-
-            <div id="alertas-stock-bajo"></div> <!-- Contenedor para múltiples alertas -->
+            <div id="alertas-stock-bajo"></div>
         </div>
     </main>
 
@@ -120,197 +112,55 @@
             minute: '2-digit'
         });
 
-        // Función para guardar el stock en localStorage
-        function guardarStockEnLocalStorage(producto, stockInicial, ingresos, ventas, stockFinal) {
-            const stockData = {
-                stockInicial: parseInt(stockInicial.textContent),
-                ingresos: parseInt(ingresos.textContent),
-                ventas: parseInt(ventas.textContent),
-                stockFinal: parseInt(stockFinal.textContent)
-            };
-            localStorage.setItem(producto, JSON.stringify(stockData));
-        }
-
-        // Define el límite de stock bajo
         const LIMITE_STOCK_BAJO = 5;
 
-        // Función para verificar el stock y mostrar la alerta
+        // Verificar el stock bajo desde el DOM
         function verificarStockBajo() {
-            const insumos = [{
-                    nombre: "Pierna de Pollo",
-                    stockFinal: parseInt(stockPollo.stockFinal.textContent)
-                },
-                {
-                    nombre: "Pierna de Res",
-                    stockFinal: parseInt(stockRes.stockFinal.textContent)
-                },
-                {
-                    nombre: "Chuleta de cerdo",
-                    stockFinal: parseInt(stockCerdo.stockFinal.textContent)
-                },
-                {
-                    nombre: "Chorizos",
-                    stockFinal: parseInt(stockChorizos.stockFinal.textContent)
-                }
-            ];
-
+            const filas = document.querySelectorAll('tbody tr');
             const alertasDiv = document.getElementById('alertas-stock-bajo');
-            alertasDiv.innerHTML = ''; // Limpiar alertas anteriores
+            alertasDiv.innerHTML = '';
 
-            let stockBajo = insumos.filter(insumo => insumo.stockFinal <= LIMITE_STOCK_BAJO);
+            let stockBajo = false;
 
-            const alertaDiv = document.querySelector('.alerta');
-            if (stockBajo.length > 0) {
-                alertaDiv.style.display = 'block'; // Muestra el div de alerta
-                stockBajo.forEach(insumo => {
+            filas.forEach(fila => {
+                const stockFinal = parseInt(fila.querySelector('td:nth-child(5)').textContent);
+                const nombreInsumo = fila.querySelector('td:first-child').textContent;
+
+                if (stockFinal <= LIMITE_STOCK_BAJO) {
                     const mensajeAlerta = document.createElement('div');
-                    mensajeAlerta.textContent = `${insumo.nombre} tiene stock bajo.`;
-                    alertasDiv.appendChild(mensajeAlerta); // Agrega cada insumo bajo al contenedor
-                });
-            } else {
-                alertaDiv.style.display = 'none'; // Oculta el div de alerta si no hay stock bajo
-            }
-        }
-
-        // Función para cargar el stock desde localStorage
-        function cargarStockDesdeLocalStorage(producto, stockInicial, ingresos, ventas, stockFinal) {
-            const stockData = JSON.parse(localStorage.getItem(producto));
-            if (stockData) {
-                stockInicial.textContent = stockData.stockInicial;
-                ingresos.textContent = stockData.ingresos;
-                ventas.textContent = stockData.ventas;
-                stockFinal.textContent = stockData.stockFinal;
-            }
-        }
-
-        // Referencias a los elementos de la tabla
-        const stockPollo = {
-            stockInicial: document.getElementById('stock-inicial-pollo'),
-            ingresos: document.getElementById('ingresos-pollo'),
-            ventas: document.getElementById('ventas-pollo'),
-            stockFinal: document.getElementById('stock-final-pollo')
-        };
-        const stockRes = {
-            stockInicial: document.getElementById('stock-inicial-res'),
-            ingresos: document.getElementById('ingresos-res'),
-            ventas: document.getElementById('ventas-res'),
-            stockFinal: document.getElementById('stock-final-res')
-        };
-        const stockCerdo = {
-            stockInicial: document.getElementById('stock-inicial-cerdo'),
-            ingresos: document.getElementById('ingresos-cerdo'),
-            ventas: document.getElementById('ventas-cerdo'),
-            stockFinal: document.getElementById('stock-final-cerdo')
-        };
-        const stockChorizos = {
-            stockInicial: document.getElementById('stock-inicial-chorizos'),
-            ingresos: document.getElementById('ingresos-chorizos'),
-            ventas: document.getElementById('ventas-chorizos'),
-            stockFinal: document.getElementById('stock-final-chorizos')
-        };
-
-        // Cargar el stock al inicio
-        cargarStockDesdeLocalStorage('pierna_pollo', stockPollo.stockInicial, stockPollo.ingresos, stockPollo.ventas,
-            stockPollo.stockFinal);
-        cargarStockDesdeLocalStorage('pierna_res', stockRes.stockInicial, stockRes.ingresos, stockRes.ventas, stockRes
-            .stockFinal);
-        cargarStockDesdeLocalStorage('chuleta_cerdo', stockCerdo.stockInicial, stockCerdo.ingresos, stockCerdo.ventas,
-            stockCerdo.stockFinal);
-        cargarStockDesdeLocalStorage('chorizos', stockChorizos.stockInicial, stockChorizos.ingresos, stockChorizos.ventas,
-            stockChorizos.stockFinal);
-
-        // Actualización de stock y almacenamiento en localStorage
-        document.getElementById('stockForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const tipoMovimiento = document.getElementById('tipoMovimiento').value;
-            const producto = document.getElementById('producto').value;
-            const cantidad = parseInt(document.getElementById('cantidad').value);
-
-            let stockInicial, ingresos, ventas, stockFinal;
-
-            if (producto === 'chuleta_cerdo') {
-                stockInicial = stockCerdo.stockInicial;
-                ingresos = stockCerdo.ingresos;
-                ventas = stockCerdo.ventas;
-                stockFinal = stockCerdo.stockFinal;
-            } else if (producto === 'pierna_pollo') {
-                stockInicial = stockPollo.stockInicial;
-                ingresos = stockPollo.ingresos;
-                ventas = stockPollo.ventas;
-                stockFinal = stockPollo.stockFinal;
-            } else if (producto === 'pierna_res') {
-                stockInicial = stockRes.stockInicial;
-                ingresos = stockRes.ingresos;
-                ventas = stockRes.ventas;
-                stockFinal = stockRes.stockFinal;
-            } else if (producto === 'chorizos') {
-                stockInicial = stockChorizos.stockInicial;
-                ingresos = stockChorizos.ingresos;
-                ventas = stockChorizos.ventas;
-                stockFinal = stockChorizos.stockFinal;
-            }
-
-            if (tipoMovimiento === 'ingreso') {
-                ingresos.textContent = parseInt(ingresos.textContent) + cantidad;
-                stockFinal.textContent = parseInt(stockFinal.textContent) + cantidad;
-            } else if (tipoMovimiento === 'venta') {
-                ventas.textContent = parseInt(ventas.textContent) + cantidad;
-                stockFinal.textContent = parseInt(stockFinal.textContent) - cantidad;
-            }
-
-            guardarStockEnLocalStorage(producto, stockInicial, ingresos, ventas, stockFinal);
-        });
-
-        // Cambia las opciones del select cuando se selecciona "Plato"
-        const tipoRadios = document.querySelectorAll('input[name="tipo"]');
-        const productoSelect = document.getElementById('producto');
-
-        tipoRadios.forEach(function(radio) {
-            radio.addEventListener('change', function() {
-                if (radio.value === 'plato') {
-                    productoSelect.innerHTML = `
-        <label for="producto">Producto</label>
-        <select id="producto" name="producto">
-            @foreach ($platos as $plato)
-                <option value="{{ $plato->id }}">{{ $plato->nombre }}</option>
-            @endforeach
-        </select>
-    `;
-                } else {
-                    productoSelect.innerHTML = `
-                        <label for="producto">Producto</label>
-        <select id="producto" name="producto">
-            @foreach ($insumos as $insumo)
-                <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
-            @endforeach
-        </select>
-                    `;
+                    mensajeAlerta.textContent = `${nombreInsumo} tiene stock bajo.`;
+                    alertasDiv.appendChild(mensajeAlerta);
+                    stockBajo = true;
                 }
             });
-        });
 
-        // Actualiza stock de chorizos si se selecciona "Porción de chorizo x3"
-        document.getElementById('stockForm').addEventListener('submit', function(event) {
-            const producto = document.getElementById('producto').value;
-            const cantidad = parseInt(document.getElementById('cantidad').value);
+            const alertaDiv = document.querySelector('.alerta');
+            alertaDiv.style.display = stockBajo ? 'block' : 'none';
+        }
 
-            if (producto === 'porcion_chorizo_x3') {
-                const chorizosNecesarios = cantidad * 3;
+        verificarStockBajo();
 
-                if (parseInt(stockChorizos.stockFinal.textContent) >= chorizosNecesarios) {
-                    stockChorizos.ventas.textContent = parseInt(stockChorizos.ventas.textContent) +
-                        chorizosNecesarios;
-                    stockChorizos.stockFinal.textContent = parseInt(stockChorizos.stockFinal.textContent) -
-                        chorizosNecesarios;
-                    guardarStockEnLocalStorage('chorizos', stockChorizos.stockInicial, stockChorizos.ingresos,
-                        stockChorizos.ventas, stockChorizos.stockFinal);
-                } else {
-                    alert('No hay suficiente stock de chorizos.');
-                    event.preventDefault(); // Evita que el formulario se procese si no hay stock suficiente
-                }
-            }
-            verificarStockBajo();
+        // Actualizar productos (insumos o platos) al cambiar la selección
+        document.querySelectorAll('input[name="tipo"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const tipoSeleccionado = this.value;
+
+                // Hacer una solicitud fetch al servidor para obtener insumos/platos según la selección
+                fetch(`/obtener-productos?tipo=${tipoSeleccionado}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const selectProducto = document.getElementById('producto');
+                        selectProducto.innerHTML = ''; // Limpiar las opciones anteriores
+
+                        data.productos.forEach(producto => {
+                            const option = document.createElement('option');
+                            option.value = producto.id;
+                            option.textContent = producto.nombre;
+                            selectProducto.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error al cargar productos:', error));
+            });
         });
     </script>
 </body>

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('nombre');
             $table->integer('precocido')->nullable();
             $table->integer('proporcion')->nullable();
+            $table->integer('stock_inicial')->default(0);
+            $table->integer('stock')->default(0);
             $table->timestamps();
         });
     }

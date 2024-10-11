@@ -7,6 +7,7 @@ use App\Models\Insumo;
 use App\Models\Movimiento;
 use App\Models\platos;
 use App\Models\local;
+use App\Models\PlatoInsumo;
 
 class StockController extends Controller
 {
@@ -20,27 +21,52 @@ class StockController extends Controller
 
     public function actualizarStock(Request $request)
     {
-        $insumo = Insumo::find($request->input('producto'));
         $tipoMovimiento = $request->input('tipoMovimiento');
+        $tipo = $request->input('tipo');
+        $productoId = $request->input('producto');
         $cantidad = $request->input('cantidad');
-
-        // Lógica para ajustar el stock basado en el tipo de movimiento
-        if ($tipoMovimiento == 'ingreso') {
-            $insumo->stock += $cantidad;
-        } else if ($tipoMovimiento == 'venta') {
-            $insumo->stock -= $cantidad;
+    
+        if ($tipo === 'insumo') {
+            // Actualizar stock de insumo directamente
+            $insumo = Insumo::find($productoId);
+    
+            if ($tipoMovimiento == 'ingreso') {
+                $insumo->stock += $cantidad;
+            } else if ($tipoMovimiento == 'venta') {
+                $insumo->stock -= $cantidad;
+            }
+    
+            $insumo->save();
+    
+            Movimiento::create([
+                'insumo_id' => $insumo->id,
+                'tipo' => $tipoMovimiento,
+                'cantidad' => $cantidad,
+            ]);
+        } else if ($tipo === 'plato') {
+            // Actualizar stock de insumos según el plato
+            $platoInsumos = PlatoInsumo::where('id_plato', $productoId)->get();
+    
+            foreach ($platoInsumos as $platoInsumo) {
+                $insumo = Insumo::find($platoInsumo->id_insumo);
+                $cantidadTotal = $platoInsumo->cantidad_insumo * $cantidad;
+    
+                if ($tipoMovimiento == 'venta') {
+                    $insumo->stock -= $cantidadTotal;
+                } else if ($tipoMovimiento == 'ingreso') {
+                    $insumo->stock += $cantidadTotal;
+                }
+    
+                $insumo->save();
+    
+                Movimiento::create([
+                    'insumo_id' => $insumo->id,
+                    'tipo' => $tipoMovimiento,
+                    'cantidad' => $cantidadTotal,
+                ]);
+            }
         }
-
-        // Guardar cambios en la base de datos
-        $insumo->save();
-
-        // Registrar el movimiento en la base de datos (opcional)
-        Movimiento::create([
-            'insumo_id' => $insumo->id,
-            'tipo' => $tipoMovimiento,
-            'cantidad' => $cantidad,
-        ]);
-
+    
         return redirect()->back()->with('success', 'Stock actualizado correctamente.');
     }
 }

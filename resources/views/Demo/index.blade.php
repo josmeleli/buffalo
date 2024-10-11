@@ -54,15 +54,9 @@
 
                 <label for="producto">Producto</label>
                 <select id="producto" name="producto">
-                    @if($tipo === 'plato')
-                    @foreach ($platos as $plato)
-                    <option value="{{ $plato->id }}">{{ $plato->nombre }}</option>
-                    @endforeach
-                    @else
                     @foreach ($insumos as $insumo)
                     <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
                     @endforeach
-                    @endif
                 </select>
 
                 <label for="cantidad">Cantidad</label>

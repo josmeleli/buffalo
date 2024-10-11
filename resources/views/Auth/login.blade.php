@@ -1,61 +1,54 @@
 <!DOCTYPE html>
-<html> 
-    <head>
-        <title>My Awesome Login Page</title>
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-        <link rel="stylesheet" href="{{asset('css/style.css')}}">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-    </head>
-
-    <body>
-        <div class="container h-100">
-            <div class="d-flex justify-content-center h-100">
-                <div class="user_card">
-                    <div class="d-flex justify-content-center">
-                        <div class="brand_logo_container">
-                            <img src="https://cdn.freebiesupply.com/logos/large/2x/pinterest-circle-logo-png-transparent.png" class="brand_logo" alt="Logo">
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-center form_container">
-                        <form>
-                            <div class="input-group mb-3">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                </div>
-                                <input type="text" name="" class="form-control input_user" value="" placeholder="username">
-                            </div>
-                            <div class="input-group mb-2">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
-                                </div>
-                                <input type="password" name="" class="form-control input_pass" value="" placeholder="password">
-                            </div>
-                            
-                            <div class="d-flex justify-content-center mt-3 login_container">
-                                <button type="submit" name="button" class="btn login_btn">Login</button>
-                            </div>
-                        </form>
-                    </div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{asset('css/style-login.css')}}">
+</head>
+<body>
+    <div class="container">
+        <div class="screen">
             
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-center links">
-                            @if (Route::has('register'))
-                                <a href="{{ route('/register') }}" class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                                    Register
-                                </a>
-                            @endif
-                        </div>
-                        <div class="d-flex justify-content-center links">
-                            <a href="#">¿Olvidastes la Contraseña?</a>
-                        </div>
+            <div class="screen__content">
+                <!-- Laravel authentication form -->
+                <form method="POST" action="{{ route('login') }}" class="login">
+                    @csrf
+                    <!-- Email Field -->
+                    <div class="login__field">
+                        <i class="login__icon fas fa-user"></i>
+                        <input id="email" type="email" class="login__input" name="email" value="{{ old('email') }}" required autofocus placeholder="User name / Email">
+                    </div>
+                    <!-- Password Field -->
+                    <div class="login__field">
+                        <i class="login__icon fas fa-lock"></i>
+                        <input id="password" type="password" class="login__input" name="password" required placeholder="Password">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button class="button login__submit">
+                        <span class="button__text">Iniciar Sesión</span>
+                        <i class="button__icon fas fa-chevron-right"></i>
+                    </button>
+                </form>
+                <!-- Register and Social Login Links -->
+                <div class="social-login">
+                    <a href="{{ route('register') }}" class="social-login__icon">Registrate</a>
+                    <div class="social-icons">
+                        <a href="#" class="social-login__icon fab fa-instagram"></a>
+                        <a href="#" class="social-login__icon fab fa-facebook"></a>
+                        <a href="#" class="social-login__icon fab fa-twitter"></a>
                     </div>
                 </div>
             </div>
+            <div class="screen__background">
+                <span class="screen__background__shape screen__background__shape4"></span>
+                <span class="screen__background__shape screen__background__shape3"></span>
+                <span class="screen__background__shape screen__background__shape2"></span>
+                <span class="screen__background__shape screen__background__shape1"></span>
+            </div>
         </div>
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    </body>
+    </div>
+</body>
 </html>

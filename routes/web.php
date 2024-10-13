@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InsumoController;
 use App\Http\Controllers\DemoController;
@@ -29,13 +30,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('platoinsumos', [PlatoInsumoController::class, 'store'])->name('platoinsumos.store');
 });
 
-// Rutas de registro y autenticación
-Route::get('/register', function () {
-    return view('Auth.register');
-})->name('register');
 
-Route::get('/admin', function () {
-    return view('Admin.index');
+Route::get('/admin', [AdminController::class, 'showLogin'])->name('admin.login');
+// Grupo de rutas protegidas para el administrador
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.index');
 });
 
 Route::get('/insumos', [InsumoController::class, 'index'])->name('insumos.index');

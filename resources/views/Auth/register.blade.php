@@ -1,70 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register</title>
-    <link rel="stylesheet" href="{{asset('css/style-login.css')}}">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
+
+    <title>Responsive Register Form</title>
+  </head>
+  <body>
     <div class="container">
-        <div class="screen">
-            <div class="screen__content">
-                <form method="POST" action="{{ route('register') }}" class="login">
-                    @csrf
-                    <div class="login__field">
-                        <i class="login__icon fas fa-user"></i>
-                        <input type="text" class="login__input" id="name" name="name" :value="{{ __('Name') }}" required autofocus placeholder="Name">
-                    </div>
+      <div class="login">
+        <div class="login__content">
+          <form method="POST" action="{{ route('register') }}" class="login__form">
+            @csrf
+            <div>
+              <h1 class="login__title">
+                <span>Regístrate</span>
+              </h1>
+            </div>
 
-                    <div class="login__field">
-                        <i class="login__icon fas fa-envelope"></i>
-                        <input type="email" class="login__input" id="email" name="email" :value="{{ __('Email') }}" required placeholder="User name / Email">
-                    </div>
-
-                    <div class="login__field">
-                        <i class="login__icon fas fa-lock"></i>
-                        <input type="password" class="login__input" id="password" name="password" required placeholder="Password" :value="{{ __('Password') }}">
-                    </div>
-
-                    <div class="login__field">
-                        <i class="login__icon fas fa-lock"></i>
-                        <input type="password" class="login__input" id="password_confirmation" :value="{{ __('Confirm Password') }}" name="password_confirmation" required placeholder="Confirm Password">
-                    </div>
-
-                    @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                    <div class="login__field">
-                        <label for="terms" class="flex items-center">
-                            <input type="checkbox" name="terms" id="terms" required>
-                            <span class="ms-2 text-sm">
-                                {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                    'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm">'.__('Terms of Service').'</a>',
-                                    'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm">'.__('Privacy Policy').'</a>',
-                                ]) !!}
-                            </span>
-                        </label>
-                    </div>
-                    @endif
-
-                    <button class="button login__submit">
-                        <span class="button__text">Register</span>
-                        <i class="button__icon fas fa-chevron-right"></i>
-                    </button>
-                </form>
-
-                <div class="social-login">
-                    <a href="{{ route('login') }}" class="social-login__icon">Login</a>
+            <div>
+              <div class="login__inputs">
+                <div>
+                  <label for="name" class="login__label">Nombre</label>
+                  <input class="login__input" type="text" id="name" name="name" placeholder="Ingresa tu nombre" required />
                 </div>
+
+                <div>
+                  <label for="email" class="login__label">Correo</label>
+                  <input class="login__input" type="email" id="email" name="email" placeholder="Ingresa tu correo" required />
+                </div>
+
+                <div>
+                  <label for="password" class="login__label">Contraseña</label>
+                  <div class="login__box">
+                    <input class="login__input" type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required />
+                    <i class="ri-eye-off-line login__eye" id="input-icon"></i>
+                  </div>
+                </div>
+
+                <div>
+                  <label for="password_confirmation" class="login__label">Confirmar Contraseña</label>
+                  <div class="login__box">
+                    <input class="login__input" type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirma tu contraseña" required />
+                    <i class="ri-eye-off-line login__eye" id="input-icon"></i>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="screen__background">
-                <span class="screen__background__shape screen__background__shape4"></span>
-                <span class="screen__background__shape screen__background__shape3"></span>
-                <span class="screen__background__shape screen__background__shape2"></span>
-                <span class="screen__background__shape screen__background__shape1"></span>
+            <div>
+              <div class="login__buttons">
+                <button type="submit" class="login__button">Registrarse</button>
+                <a href="{{ route('login') }}" class="login__button login__button-ghost">Iniciar Sesión</a>
+              </div>
             </div>
+          </form>
         </div>
+      </div>
     </div>
-</body>
+
+  <!--=============== MAIN JS ===============-->
+  <script src="./assets/js/main.js"></script>
+  </body>
 </html>

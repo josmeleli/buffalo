@@ -1,54 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{asset('css/style-login.css')}}">
-</head>
-<body>
-    <div class="container">
-        <div class="screen">
-            
-            <div class="screen__content">
-                <!-- Laravel authentication form -->
-                <form method="POST" action="{{ route('login') }}" class="login">
-                    @csrf
-                    <!-- Email Field -->
-                    <div class="login__field">
-                        <i class="login__icon fas fa-user"></i>
-                        <input id="email" type="email" class="login__input" name="email" value="{{ old('email') }}" required autofocus placeholder="User name / Email">
-                    </div>
-                    <!-- Password Field -->
-                    <div class="login__field">
-                        <i class="login__icon fas fa-lock"></i>
-                        <input id="password" type="password" class="login__input" name="password" required placeholder="Password">
-                    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-                    <!-- Submit Button -->
-                    <button class="button login__submit">
-                        <span class="button__text">Iniciar Sesión</span>
-                        <i class="button__icon fas fa-chevron-right"></i>
-                    </button>
-                </form>
-                <!-- Register and Social Login Links -->
-                <div class="social-login">
-                    <a href="{{ route('register') }}" class="social-login__icon">Registrate</a>
-                    <div class="social-icons">
-                        <a href="#" class="social-login__icon fab fa-instagram"></a>
-                        <a href="#" class="social-login__icon fab fa-facebook"></a>
-                        <a href="#" class="social-login__icon fab fa-twitter"></a>
-                    </div>
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
+
+    <title>Responsive login form</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="login">
+        <div class="login__content">
+          
+
+          <form class="login__form">
+            <div>
+              <h1 class="login__title">
+                <span>Bienvenido</span> 
+              </h1>
+
+              
+            </div>
+
+            <div>
+              <div class="login__inputs">
+                <div>
+                  <label for="email" class="login__label">Correo</label>
+                  <input class="login__input" type="email" id="email" placeholder="Ingresa tu correo" required />
                 </div>
+
+                <div>
+                  <label for="password" class="login__label">Contraseña</label>
+                  <div class="login__box">
+                    <input class="login__input" type="password" id="password" placeholder="Ingresa tu constraseña" required />
+                    <i class="ri-eye-off-line login__eye" id="input-icon"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="login__check">
+                <label class="login__check-label" for="check">
+                  <input class="login__check-input" type="checkbox" id="check" />
+                  <i class="ri-check-line login__check-icon"></i>
+                  Recuérdame
+                </label>
+              </div>
             </div>
-            <div class="screen__background">
-                <span class="screen__background__shape screen__background__shape4"></span>
-                <span class="screen__background__shape screen__background__shape3"></span>
-                <span class="screen__background__shape screen__background__shape2"></span>
-                <span class="screen__background__shape screen__background__shape1"></span>
+
+            <div>
+              <div class="login__buttons">
+                <button class="login__button">Ingresar</button>
+                <a href="{{ route('register') }}" class="login__button login__button-ghost">Registrarse</a>
+              </div>
+
+              <a class="login__forgot" href="#">¿Olvidaste tu contraseña?</a>
             </div>
+          </form>
         </div>
+      </div>
     </div>
-</body>
+
+  <!--=============== MAIN JS ===============-->
+  <script src="./assets/js/main.js"></script>
+  </body>
 </html>

@@ -16,15 +16,15 @@
     <div class="container">
       <div class="login">
         <div class="login__content">
-          
+
 
           <form class="login__form">
             <div>
               <h1 class="login__title">
-                <span>Bienvenido</span> 
+                <span>Bienvenido</span>
               </h1>
 
-              
+
             </div>
 
             <div>

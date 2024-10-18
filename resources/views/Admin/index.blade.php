@@ -57,11 +57,10 @@
                         </div>
                     </div>
                     <div class="card-body p-4">
-                        <h5 class="card-title mb-9 fw-semibold">Insumos de Stock Bajo</h5>
+                        <h5 class="card-title mb-9 fw-semibold">Insumos de Stock Bajo </h5>
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <div class="d-flex">
-                                    <i class="ti ti-arrow-down-right text-danger"></i>
                                     <h4 class="fw-semibold mb-3">{{$insumoBajo}}</h4>
                                 </div>
                                 <div class="d-flex align-items-center mb-3"></div>

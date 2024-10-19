@@ -86,7 +86,26 @@
         </div>
     </div>
 
+    <div>
+        <div class="col-lg-12">
+            @livewire('insumo-table')
+        </div>
+    </div>
+
 @endsection
+
+@section('css')
+<style>
+    .table-container {
+        max-width: 800px;
+        margin: 50px auto;
+    }
+    .form-control {
+        margin-bottom: 10px;
+    }
+</style>
+@endsection
+
 
 @section('js')
     <script>

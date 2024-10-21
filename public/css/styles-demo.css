@@ -132,3 +132,73 @@ button:hover {
     border-radius: 5px;
     font-weight: bold;
 }
+
+            .location-info {
+                margin-bottom: 20px; /* Espacio debajo del bloque de información del local */
+            }
+        
+            .form-container {
+                padding: 15px; /* Relleno alrededor del contenedor del formulario */
+                border: 1px solid #ccc; /* Borde alrededor del formulario */
+                border-radius: 5px; /* Bordes redondeados */
+                background-color: #f9f9f9; /* Color de fondo más claro */
+            }
+        
+            .plato-container {
+                margin-top: 15px;
+                display: flex;
+                flex-direction: column;
+                gap: -10px; /* Espacio entre cada plato */
+            }
+        
+            .plato-item {
+                display: flex;
+                justify-content: space-between; /* Espacio entre los elementos */
+                align-items: center; /* Alinear elementos verticalmente */
+            }
+        
+            .checkbox-container {
+                display: flex;
+                align-items: center; /* Alinear checkbox y label */
+                flex: 1; /* Permitir que el contenedor se expanda */
+            }
+        
+            .plato-label {
+                width: 19ch; /* Limitar el ancho del label a 12 caracteres */
+                white-space: nowrap; /* Evitar que el texto se divida en varias líneas */
+                overflow: hidden; /* Ocultar el desbordamiento */
+                text-overflow: ellipsis; /* Añadir "..." si el texto es demasiado largo */
+                margin-right: 10px; /* Espacio a la derecha del label */
+            }
+        
+            .plato-item input[type="checkbox"] {
+                margin-right: -70px; /* Espacio entre checkbox y label */
+            }
+        
+            .cantidad-input {
+                width: 100px; /* Ajustar el ancho del input de cantidad */
+                margin-left: 350px; /* Espacio a la izquierda */
+            }
+        
+            .btn {
+                margin-top: 15px; /* Espacio por encima del botón */
+                padding: 10px 15px; /* Relleno del botón */
+                background-color: #007bff; /* Color de fondo del botón */
+                color: #fff; /* Color del texto del botón */
+                border: none; /* Sin borde */
+                border-radius: 5px; /* Bordes redondeados del botón */
+                cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+            }
+        
+            .btn:hover {
+                background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+            }
+
+
+            .stock-table .ventas {
+    background-color: rgba(255, 0, 0, 0.3); /* Color rojo claro */
+}
+
+.stock-table .stock-final {
+    background-color: rgba(0, 128, 0, 0.3); /* Color verde suave */
+}

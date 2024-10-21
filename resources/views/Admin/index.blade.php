@@ -56,7 +56,7 @@
                         </div>
                         </div>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 card overflow-hidden">
                         <h5 class="card-title mb-9 fw-semibold">Insumos de Stock Bajo </h5>
                         <div class="row align-items-center">
                             <div class="col-8">
@@ -86,7 +86,26 @@
         </div>
     </div>
 
+    <div>
+        <div class="col-lg-11 px-4">
+            @livewire('insumo-table')
+        </div>
+    </div>
+
 @endsection
+
+@section('css')
+<style>
+    .table-container {
+        max-width: 800px;
+        margin: 50px auto;
+    }
+    .form-control {
+        margin-bottom: 10px;
+    }
+</style>
+@endsection
+
 
 @section('js')
     <script>

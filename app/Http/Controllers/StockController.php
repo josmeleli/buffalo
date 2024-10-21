@@ -20,45 +20,53 @@ class StockController extends Controller
     }
 
     public function actualizarStock(Request $request)
-    {
-        $tipoMovimiento = $request->input('tipoMovimiento');
-        $tipo = $request->input('tipo');
+{
+    $tipoMovimiento = $request->input('tipoMovimiento');
+    $tipo = $request->input('tipo');
+
+    if ($tipo === 'insumo') {
+        // Actualizar stock de insumo directamente
         $productoId = $request->input('producto');
         $cantidad = $request->input('cantidad');
-    
-        if ($tipo === 'insumo') {
-            // Actualizar stock de insumo directamente
-            $insumo = Insumo::find($productoId);
-    
-            if ($tipoMovimiento == 'ingreso') {
-                $insumo->stock += $cantidad;
-            } else if ($tipoMovimiento == 'venta') {
-                $insumo->stock -= $cantidad;
-            }
-    
-            $insumo->save();
-    
-            Movimiento::create([
-                'insumo_id' => $insumo->id,
-                'tipo' => $tipoMovimiento,
-                'cantidad' => $cantidad,
-            ]);
-        } else if ($tipo === 'plato') {
-            // Actualizar stock de insumos según el plato
+
+        $insumo = Insumo::find($productoId);
+
+        if ($tipoMovimiento == 'ingreso') {
+            $insumo->stock += $cantidad;
+        } else if ($tipoMovimiento == 'venta') {
+            $insumo->stock -= $cantidad;
+        }
+
+        $insumo->save();
+
+        Movimiento::create([
+            'insumo_id' => $insumo->id,
+            'tipo' => $tipoMovimiento,
+            'cantidad' => $cantidad,
+        ]);
+    } else if ($tipo === 'plato') {
+        // Actualizar stock de insumos según los platos seleccionados
+        $productosSeleccionados = $request->input('productos', []);
+        $cantidades = $request->input('cantidad', []);
+
+        foreach ($productosSeleccionados as $productoId) {
+            // Obtener la cantidad específica para el plato
+            $cantidad = $cantidades[$productoId] ?? 1; // Por defecto 1 si no se especifica
+            
             $platoInsumos = PlatoInsumo::where('id_plato', $productoId)->get();
-    
+
             foreach ($platoInsumos as $platoInsumo) {
                 $insumo = Insumo::find($platoInsumo->id_insumo);
                 $cantidadTotal = $platoInsumo->cantidad_insumo * $cantidad;
-    
+
                 if ($tipoMovimiento == 'venta') {
                     $insumo->stock -= $cantidadTotal;
                 } else if ($tipoMovimiento == 'ingreso') {
                     $insumo->stock += $cantidadTotal;
                 }
-    
+
                 $insumo->save();
-    
+
                 Movimiento::create([
                     'insumo_id' => $insumo->id,
                     'tipo' => $tipoMovimiento,
@@ -66,7 +74,9 @@ class StockController extends Controller
                 ]);
             }
         }
-    
-        return redirect()->back()->with('success', 'Stock actualizado correctamente.');
     }
+
+    return redirect()->back()->with('success', 'Stock actualizado correctamente.');
+}
+
 }

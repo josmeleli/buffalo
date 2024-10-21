@@ -3,19 +3,28 @@
 namespace App\Livewire;
 
 use App\Models\insumo;
+use App\Models\platos;
 use Livewire\Component;
 
 class InsumoTable extends Component
 {
-    public $search = ''; 
-
+    public $search = '';
+    public $filter = 'insumo';
     public function render()
     {
-        // Filtrar los insumos según la búsqueda
-        $insumos = insumo::where('nombre', 'like', '%' . $this->search . '%')
+        if ($this->filter === 'insumo') {
+            $data = Insumo::where('nombre', 'like', '%' . $this->search . '%')
                           ->orWhere('precocido', 'like', '%' . $this->search . '%')
                           ->get();
+        } else {
+            $data = platos::where('nombre', 'like', '%' . $this->search . '%')->get();
+        }
 
-        return view('livewire.insumo-table', ['insumos' => $insumos]);
+        return view('livewire.insumo-table', ['data' => $data]);
+    }
+
+    public function updatedFilter($value)
+    {
+        $this->reset('search'); // Reiniciar el campo de búsqueda al cambiar el filtro
     }
 }

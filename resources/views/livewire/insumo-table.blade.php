@@ -1,6 +1,6 @@
 <div>
     <div class="table-container">
-        <h2 class="text-center mb-4">Filtrar Insumos o Platos</h2>
+        <h2 class="text-center mb-4">Tabla de Insumos o Platos</h2>
 
         <div class="d-flex">
             {{-- Campo de Entrada para la busqueda --}}
@@ -22,14 +22,14 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <li>
-                        <a class="dropdown-item" href="#" wire:click="$set('filter', 'insumo')">
+                        <buttom class="dropdown-item" wire:click="$set('filter', 'insumo')">
                             Insumo
-                        </a>
+                        </buttom>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#" wire:click="$set('filter', 'plato')">
+                        <buttom class="dropdown-item" wire:click="$set('filter', 'plato')">
                             Plato
-                        </a>
+                        </buttom>
                     </li>
                 </ul>
             </div>

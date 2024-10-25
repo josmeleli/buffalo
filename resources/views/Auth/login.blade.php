@@ -1,71 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="{{asset('css/style-login.css')}}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="login-reg-panel">
+		<div class="login-info-box">
+			<h4>Eres Administrador</h4>
+			<p>Ingresa Aquí</p>
+			<a href="{{route('admin.login')}}" class="admin">Ir</a>
 
-    <!--=============== REMIXICONS ===============-->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+            <h4>¿Ya tienes Cuenta?</h4>
+			<p>Ingresa Aquí</p>
+			<label id="label-register" for="log-reg-show">Login</label>
+			<input type="radio" name="active-log-panel" id="log-reg-show"  checked="checked">
+		</div>
 
-    <!--=============== CSS ===============-->
-    <link rel="stylesheet" href="{{ asset('css/style-login.css') }}">
+		<div class="register-info-box">
+			<h2>¿No tienes un Cuenta?</h2>
+			<p>Registrate aqui </p>
+			<label id="label-login" for="log-login-show">Register</label>
+			<input type="radio" name="active-log-panel" id="log-login-show">
+		</div>
 
-    <title>Responsive login form</title>
-  </head>
-  <body>
-    <div class="container">
-      <div class="login">
-        <div class="login__content">
+		<div class="white-panel">
+			<div class="login-show">
+                <form action="{{route('login')}}" method="POST">
+                    @csrf
+                    <h2>LOGIN</h2>
+                    <input type="text" placeholder="Email" name="email" :value="{{ old('email') }}" required>
+                    <input type="password" placeholder="Password" name="password" required>
+                    <input type="submit" value="Login">
+                </form>
+			</div>
+			<div class="register-show">
+                <form action="{{route('register')}}" method="POST">
+                    @csrf
+                    <h2>REGISTER</h2>
+                    <input type="text" placeholder="Nombre" name="name" value="{{ old('name') }}" required>
+                    <input type="text" placeholder="Email" name="email" value="{{ old('email') }}" required>
+                    <input type="password" placeholder="Password" name="password" required>
+                    <input type="password" placeholder="Confirm Password" name="password_confirmation" required>
+                    <input type="submit" value="Register">
+                </form>
+			</div>
+		</div>
+	</div>
 
-
-          <form class="login__form">
-            <div>
-              <h1 class="login__title">
-                <span>Bienvenido</span>
-              </h1>
-
-
-            </div>
-
-            <div>
-              <div class="login__inputs">
-                <div>
-                  <label for="email" class="login__label">Correo</label>
-                  <input class="login__input" type="email" id="email" placeholder="Ingresa tu correo" required />
-                </div>
-
-                <div>
-                  <label for="password" class="login__label">Contraseña</label>
-                  <div class="login__box">
-                    <input class="login__input" type="password" id="password" placeholder="Ingresa tu constraseña" required />
-                    <i class="ri-eye-off-line login__eye" id="input-icon"></i>
-                  </div>
-                </div>
-              </div>
-
-              <div class="login__check">
-                <label class="login__check-label" for="check">
-                  <input class="login__check-input" type="checkbox" id="check" />
-                  <i class="ri-check-line login__check-icon"></i>
-                  Recuérdame
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <div class="login__buttons">
-                <button class="login__button">Ingresar</button>
-                <a href="{{ route('register') }}" class="login__button login__button-ghost">Registrarse</a>
-              </div>
-
-              <a class="login__forgot" href="#">¿Olvidaste tu contraseña?</a>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-  <!--=============== MAIN JS ===============-->
-  <script src="./assets/js/main.js"></script>
-  </body>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{{asset('js/login.js')}}"></script>
+</body>
 </html>

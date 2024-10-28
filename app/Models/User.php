@@ -29,6 +29,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'id_local',
     ];
 
     /**
@@ -63,5 +64,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function local()
+    {
+        return $this->belongsTo(Local::class, 'id_local');
     }
 }

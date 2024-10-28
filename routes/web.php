@@ -8,10 +8,13 @@ use App\Http\Controllers\LocalInsumoController;
 use App\Http\Controllers\PlatosController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\PlatoInsumoController;
+use App\Models\Local;
 
 Route::get('/', function () {
-    return view('Auth.login');
+    $locales = Local::all();
+    return view('Auth.login', compact('locales'));
 });
+
 
 // Rutas de autenticación de Jetstream
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {

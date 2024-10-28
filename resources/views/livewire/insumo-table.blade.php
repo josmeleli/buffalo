@@ -2,12 +2,11 @@
     <div class="col-12 px-4">
         <div class="table-container">
             <h2 class="text-center mb-4">Tabla de Insumos o Platos</h2>
-    
+
             <div class="d-flex">
                 {{-- Campo de Entrada para la busqueda --}}
                 <input type="text" wire:model.live="search" class="form-control mb-3"
                     placeholder="Buscar {{ $filter === 'insumo' ? 'insumo' : 'plato' }}...">
-    
                 {{-- Boton de filtro  --}}
                 <div class="dropdown mb-3 d-flex justify-content-end ">
                     <button class="btn btn-secondary dropdown-toggle d-flex align-items-center"
@@ -34,10 +33,10 @@
                         </li>
                     </ul>
                 </div>
-    
+
             </div>
-    
-    
+
+
            {{-- Tabla de insumos o platos --}}
             <table class="table table-striped table-bordered">
                 <thead class="table-dark">
@@ -72,5 +71,5 @@
             </table>
         </div>
     </div>
-    
+
 </div>

@@ -46,6 +46,11 @@
                     <input type="text" placeholder="Email" name="email" value="{{ old('email') }}" required>
                     <input type="password" placeholder="Password" name="password" required>
                     <input type="password" placeholder="Confirm Password" name="password_confirmation" required>
+                    <select name="id_local" required>
+                        @foreach ($locales as $local)
+                            <option value="{{ $local->id }}">{{ $local->nombre }}</option>
+                        @endforeach
+                    </select>
                     <input type="submit" value="Register">
                 </form>
 			</div>

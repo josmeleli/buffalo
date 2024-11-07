@@ -91,6 +91,12 @@
                 @csrf
                 <label for="nombre">Nombre de Platos</label>
                 <input type="text" id="nombre" name="nombre">
+                <label for="id_local">Local</label>
+                <select id="id_local" name="id_local">
+                    @foreach ($locals as $local)
+                    <option value="{{ $local->id }}">{{ $local->nombre }}</option>
+                    @endforeach
+                </select>    
                 <button type="submit">Guardar</button>
             </form>
         </div>

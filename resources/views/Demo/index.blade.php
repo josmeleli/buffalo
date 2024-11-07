@@ -59,6 +59,13 @@
                 <input type="hidden" id="tipoItem" name="tipo" value="plato">
 
                 <div class="plato-container">
+                    @if (auth()->check())
+                    @php
+                    $user = auth()->user();
+                    $localId = $user->id_local;
+                    $platos = \App\Models\Platos::where('id_local', $localId)->get();
+                    @endphp
+
                     @foreach ($platos as $plato)
                     <div class="plato-item">
                         <div class="checkbox-container">
@@ -68,6 +75,9 @@
                         <input type="number" name="cantidad[{{ $plato->id }}]" value="1" min="1" class="cantidad-input">
                     </div>
                     @endforeach
+                    @else
+                    <p>Por favor, inicie sesión para ver los platos disponibles.</p>
+                    @endif
                 </div>
 
                 <button type="submit" class="btn btn-primary">Actualizar</button>

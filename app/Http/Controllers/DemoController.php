@@ -6,6 +6,9 @@ use App\Models\insumo;
 use App\Models\local;
 use App\Models\platos;
 use Illuminate\Http\Request;
+use App\Models\localinsumo;
+use Illuminate\Support\Facades\Auth;
+
 
 class DemoController extends Controller
 {
@@ -13,7 +16,11 @@ class DemoController extends Controller
         $insumos = insumo::all();
         $platos = platos::all();
         $tipo = 'insumo';
-        return view('Demo.index', compact('insumos', 'platos', 'tipo'));
+        $idLocal = Auth::user()->id_local; // Asume que tienes el 'local_id' en el modelo del usuario.
+        $localInsumos = LocalInsumo::with('insumo') // Asegúrate de tener la relación 'insumo' en LocalInsumo.
+                            ->where('id_local', $idLocal)
+                            ->get();
+        return view('Demo.index', compact('insumos', 'platos', 'tipo', 'localInsumos'));
     }
 
 

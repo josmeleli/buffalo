@@ -42,7 +42,8 @@
             @endif
         </div>
 
-        <div class="form-container">
+    <div class="containerpadre">
+        <div class="form-container1">
             @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -84,106 +85,50 @@
             </form>
         </div>
 
-        <style>
-            .location-info {
-                margin-bottom: 20px;
-                /* Espacio debajo del bloque de información del local */
-            }
 
-            .form-container {
-                padding: 15px;
-                /* Relleno alrededor del contenedor del formulario */
-                border: 1px solid #ccc;
-                /* Borde alrededor del formulario */
-                border-radius: 5px;
-                /* Bordes redondeados */
-                background-color: #f9f9f9;
-                /* Color de fondo más claro */
-            }
+        <div class="form-container2">
+            @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
 
-            .plato-container {
-                margin-top: 15px;
-                display: flex;
-                flex-direction: column;
-                gap: -10px;
-                /* Espacio entre cada plato */
-            }
+            <form action="{{ route('actualizar.stock') }}" method="POST">
+                @csrf
 
-            .plato-item {
-                display: flex;
-                justify-content: space-between;
-                /* Espacio entre los elementos */
-                align-items: center;
-                /* Alinear elementos verticalmente */
-            }
+                <label for="tipoMovimiento">Movimiento: Ingreso</label>
+                <input type="hidden" id="tipoMovimiento" name="tipoMovimiento" value="ingreso">
 
-            .checkbox-container {
-                display: flex;
-                align-items: center;
-                /* Alinear checkbox y label */
-                flex: 1;
-                /* Permitir que el contenedor se expanda */
-            }
+                <label for="tipoItem">Tipo de Producto: Insumo</label>
+                <input type="hidden" id="tipoItem" name="tipo" value="insumo">
 
-            .plato-label {
-                width: 19ch;
-                /* Limitar el ancho del label a 12 caracteres */
-                white-space: nowrap;
-                /* Evitar que el texto se divida en varias líneas */
-                overflow: hidden;
-                /* Ocultar el desbordamiento */
-                text-overflow: ellipsis;
-                /* Añadir "..." si el texto es demasiado largo */
-                margin-right: 10px;
-                /* Espacio a la derecha del label */
-            }
+                <div class="insumo-container">
+                    @if (auth()->check())
+                    @php
+                    $user = auth()->user();
+                    $localId = $user->id_local;
+                    $platos = \App\Models\Platos::where('id_local', $localId)->get();
+                    @endphp
 
-            .plato-item input[type="checkbox"] {
-                margin-right: -70px;
-                /* Espacio entre checkbox y label */
-            }
+                    @foreach ($insumos as $insumo)
+                    <div class="insumo-item">
+                        <div class="checkbox-container2">
+                            <input type="checkbox" id="insumo_{{ $insumo->id }}" name="productos[]" value="{{ $insumo->id }}">
+                            <label for="insumo-{{ $insumo->id }}" class="insumo-label">{{ $insumo->nombre }}</label>
+                        </div>
+                        <input type="number" name="cantidad[{{ $insumo->id }}]" value="1" min="1" class="cantidad-input2">
+                    </div>
+                    @endforeach
+                    @else
+                    <p>Por favor, inicie sesión para ver los platos disponibles.</p>
+                    @endif
+                </div>
 
-            .cantidad-input {
-                width: 100px;
-                /* Ajustar el ancho del input de cantidad */
-                margin-left: 350px;
-                /* Espacio a la izquierda */
-            }
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </form>
+        </div>
 
-            .btn {
-                margin-top: 15px;
-                /* Espacio por encima del botón */
-                padding: 10px 15px;
-                /* Relleno del botón */
-                background-color: #007bff;
-                /* Color de fondo del botón */
-                color: #fff;
-                /* Color del texto del botón */
-                border: none;
-                /* Sin borde */
-                border-radius: 5px;
-                /* Bordes redondeados del botón */
-                cursor: pointer;
-                /* Cambia el cursor al pasar sobre el botón */
-            }
-
-            .btn:hover {
-                background-color: #0056b3;
-                /* Color más oscuro al pasar el cursor */
-            }
-
-
-            .stock-table .ventas {
-                background-color: rgba(255, 0, 0, 0.3);
-                /* Color rojo claro */
-            }
-
-            .stock-table .stock-final {
-                background-color: rgba(0, 128, 0, 0.3);
-                /* Color verde suave */
-            }
-        </style>
-
+    </div>
 
         <div class="stock-table">
             <table>

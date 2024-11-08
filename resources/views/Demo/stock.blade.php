@@ -37,7 +37,7 @@
                 {{ session('error') }}
             </div>
             @endif
-            <h4>registra insumos</h4><br>
+            <h1>Registro de Insumos</h1><br>
             <form action="{{ route('insumos.store') }}" method="POST">
                 @csrf
                 <label for="nombre">Nombre</label>

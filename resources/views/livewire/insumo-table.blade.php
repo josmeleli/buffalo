@@ -1,13 +1,14 @@
 <div>
-    <div class="col-12 px-4">
+    <div class="col-14">
         <div class="table-container">
             <h2 class="text-center mb-4">Tabla de Insumos o Platos</h2>
 
             <div class="d-flex">
                 {{-- Campo de Entrada para la busqueda --}}
-                <input type="text" wire:model.live="search" class="form-control mb-3"
+                <input type="text" wire:model.live="search" class="form-control mb-3 mr-3"
                     placeholder="Buscar {{ $filter === 'insumo' ? 'insumo' : 'plato' }}...">
-                {{-- Boton de filtro  --}}
+                <div style="width: 15px"></div>
+
                 <div class="dropdown mb-3 d-flex justify-content-end ">
                     <button class="btn btn-secondary dropdown-toggle d-flex align-items-center"
                             type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
@@ -38,36 +39,36 @@
 
 
            {{-- Tabla de insumos o platos --}}
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        @if ($filter === 'insumo')
-                            <th>Precocido</th>
-                            <th>Proporción</th>
-                            <th>Stock Inicial</th>
-                            <th>Stock Final</th>
-                        @endif
-                    </tr>
-                </thead>
-                <tbody class="text-align-center">
-                    @foreach ($data as $index => $item)
+           <div class="table-responsive">
+                <table class="table table-striped table-bordered text-center">
+                    <thead class="table-dark">
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $item->nombre }}</td>
+                            <th>#</th>
+                            <th>Nombre</th>
                             @if ($filter === 'insumo')
-                                <td>{{ $item->precocido }}</td>
-                                <td>{{ $item->proporcion }}</td>
-                                <td>{{ $item->stock_inicial }}</td>
-                                <td class="{{ $item->stock < 5 ? 'bg-danger text-white' : '' }}">
-                                    {{ $item->stock < 0 ? 0 : $item->stock }}
-                                </td>
+                                <th>Precocido</th>
+                                <th>Proporción</th>
+                                <th>Stock Final</th>
                             @endif
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="text-align-center">
+                        @foreach ($data as $index => $item)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $item->nombre }}</td>
+                                @if ($filter === 'insumo')
+                                    <td>{{ $item->precocido }}</td>
+                                    <td>{{ $item->proporcion }}</td>
+                                    <td class="{{ $item->stock < 10 ? 'bg-danger text-white' : '' }}">
+                                        {{ $item->stock < 0 ? 0 : $item->stock }}
+                                    </td>
+                                @endif
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+           </div>
         </div>
     </div>
 

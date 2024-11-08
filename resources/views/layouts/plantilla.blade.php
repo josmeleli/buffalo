@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Buffalo Panel Administrador</title>
-  <link rel="shortcut icon" type="image/png" href="{{asset('images/logos/favicon.png')}}" />
+  <link rel="shortcut icon" type="image/png" href="{{asset('images/logos/logo.ico')}}" />
   <link rel="stylesheet" href="{{asset('css/styles.min.css')}}" />
 </head>
 
@@ -33,12 +33,22 @@
               <span class="hide-menu">Home</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="{{route('admin.index')}}" aria-expanded="false">
+                <a class="sidebar-link" href="{{ route('admin.index') }}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-layout-dashboard"></i>
+                  </span>
+                  <span class="hide-menu">Dashboard</span>
+                </a>
+            </li>
+          </ul>
+          <ul id="sidebarna">
+            <li class="custom-bg border border-custom p-2 rounded">
+                <a class="sidebar-link" href="" aria-expanded="false">
                 <span>
-                  <i class="ti ti-layout-dashboard"></i>
+                    <i class="ti ti-location-pin"></i> <!-- Aquí puedes usar otro ícono que represente un local -->
                 </span>
-                <span class="hide-menu">Dashboard</span>
-              </a>
+                <span class="hide-menu">Local</span>
+                </a>
             </li>
           </ul>
         </nav>

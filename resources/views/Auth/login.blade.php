@@ -47,8 +47,8 @@
                     <input type="password" placeholder="Password" name="password" required>
                     <input type="password" placeholder="Confirm Password" name="password_confirmation" required>
                     <select name="id_local" required>
-                        @foreach ($locales as $local)
-                            <option value="{{ $local->id }}">{{ $local->nombre }}</option>
+                        @foreach ($locales as $local )
+                            <option value="{{$local->id}}">{{$local->nombre}}</option>
                         @endforeach
                     </select>
                     <input type="submit" value="Register">

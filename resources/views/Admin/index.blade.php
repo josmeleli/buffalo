@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <h2 class="text-lg font-bold text-red-500">Insumos con Stock Crítico</h2>
                     <div class="table-responsive">
-                        <table class="table w-100 table-striped table-bordered text-center" >
+                        <table class="table table-striped table-bordered text-center" >
                             <thead>
                                 <tr class="bg-red-100 text-red-700">
                                     <th class="border border-gray-200 px-4 py-2">Nombre</th>
@@ -67,24 +67,12 @@
         </div>
     </div>
 
-    <div>
-        <div class="col-lg-15 px-3">
-            @livewire('insumo-table')
-        </div>
-    </div>
+    
 
 @endsection
 
 @section('css')
-    <style>
-        .table-container {
-            max-width: 800px;
-            margin: 50px auto;
-        }
-        .form-control {
-            margin-bottom: 10px;
-        }
-    </style>
+    
 @endsection
 
 

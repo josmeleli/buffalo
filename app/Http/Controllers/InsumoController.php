@@ -13,6 +13,11 @@ class InsumoController extends Controller
         return view('Insumos.index', compact('insumos'));
     }
 
+    public function showInsumo(){
+        return view('Admin.insumos');
+    }
+
+
     function store(Request $request){
 
         $request->validate([

@@ -42,13 +42,23 @@
             </li>
           </ul>
           <ul id="sidebarna">
-            <li class="custom-bg border border-custom p-2 rounded">
-                <a class="sidebar-link" href="" aria-expanded="false">
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ route('admin.local') }}" aria-expanded="false">
                 <span>
-                    <i class="ti ti-location-pin"></i> <!-- Aquí puedes usar otro ícono que represente un local -->
+                  <i class="ti ti-layout-dashboard"></i>
                 </span>
-                <span class="hide-menu">Local</span>
-                </a>
+                <span class="hide-menu">Locales</span>
+              </a>
+            </li>
+          </ul>
+          <ul id="sidebarna">
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ route('admin.insumos') }}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Insumos</span>
+              </a>
             </li>
           </ul>
         </nav>

@@ -19,7 +19,6 @@
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                             <path d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z" />
                         </svg>
-                        <span class="ms-2">Filtro</span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <li>
@@ -33,9 +32,53 @@
                             </buttom>
                         </li>
                     </ul>
-                </div>
 
+                    <div style="width: 8px"></div>
+
+                    <button type="button" class="btn btn-success d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modalInsumo">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" 
+                                width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" 
+                                stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 5v14m-7 -7h14" />
+                        </svg>
+                    </button>
+
+                    
+                </div>
             </div>
+
+            {{-- modal de registrar insumo --}}
+            <div class="modal fade" id="modalInsumo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Registra un Nuevo Insumo</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('insumos.store') }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <input type="text" class="form-control" name="nombre" placeholder="Nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="number" class="form-control" name="precocido" placeholder="Precocido" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="number" class="form-control" name="proporcion" placeholder="Proporcion" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="number" class="form-control" name="stock" placeholder="Stock" value="0" required>
+                            </div>
+                            <div class="text-end">
+                                <button class="btn btn-dark aling-items-end" type="submit">Registrar</button>
+                            </div>
+                        </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
 
            {{-- Tabla de insumos o platos --}}

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('platos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->foreignId('id_local')->references('id')->on('locals');
             $table->timestamps();
         });
     }

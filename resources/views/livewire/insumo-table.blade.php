@@ -51,24 +51,10 @@
                                 <th>Stock Final</th>
                             @endif
                         </tr>
-                    </thead>
-                    <tbody class="text-align-center">
-                        @foreach ($data as $index => $item)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $item->nombre }}</td>
-                                @if ($filter === 'insumo')
-                                    <td>{{ $item->precocido }}</td>
-                                    <td>{{ $item->proporcion }}</td>
-                                    <td class="{{ $item->stock < 10 ? 'bg-danger text-white' : '' }}">
-                                        {{ $item->stock < 0 ? 0 : $item->stock }}
-                                    </td>
-                                @endif
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-           </div>
+                    @endforeach
+
+                </tbody>
+            </table>
         </div>
     </div>
 

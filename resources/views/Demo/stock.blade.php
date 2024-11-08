@@ -60,11 +60,43 @@
         </div>
 
         <div class="form-container">
-            
+            <h4>Registro de Stock de Insumo en Local</h4><br>
+            <form action="{{ route('localinsumos.store') }}" method="POST">
+                @csrf
+                <label for="id_local" style="display: inline-block; width: 150px;">Local</label>
+                <select id="id_local" name="id_local" style="display: inline-block; width: 200px;">
+                    @foreach ($locals as $local)
+                    <option value="{{ $local->id }}">{{ $local->nombre }}</option>
+                    @endforeach
+                </select>
+
+                <label for="id_insumo" style="display: inline-block; width: 150px;">Insumo</label>
+                <select id="id_insumo" name="id_insumo" style="display: inline-block; width: 200px;">
+                    @foreach ($insumos as $insumo)
+                    <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
+                    @endforeach
+                </select>
+
+                <label for="stock" style="display: inline-block; width: 150px;">Stock</label>
+                <input type="number" id="stock" name="stock" value="1" min="1" style="display: inline-block; width: 200px;">
+
+                <button type="submit" style="display: inline-block; margin-top: 10px;">Guardar</button>
+            </form>
+        </div>
+
+
+        <div class="form-container">
+
             <form action="{{ route('platos.store') }}" method="POST">
                 @csrf
                 <label for="nombre">Nombre de Platos</label>
                 <input type="text" id="nombre" name="nombre">
+                <label for="id_local">Local</label>
+                <select id="id_local" name="id_local">
+                    @foreach ($locals as $local)
+                    <option value="{{ $local->id }}">{{ $local->nombre }}</option>
+                    @endforeach
+                </select>    
                 <button type="submit">Guardar</button>
             </form>
         </div>
@@ -78,14 +110,14 @@
                 <label for="id_insumo" style="display: inline-block; width: 150px;">Insumo</label>
                 <select id="id_insumo" name="id_insumo" style="display: inline-block; width: 200px;">
                     @foreach ($insumos as $insumo)
-                        <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
+                    <option value="{{ $insumo->id }}">{{ $insumo->nombre }}</option>
                     @endforeach
                 </select>
 
                 <label for="id_plato" style="display: inline-block; width: 150px;">Plato</label>
                 <select id="id_plato" name="id_plato" style="display: inline-block; width: 200px;">
                     @foreach ($platos as $plato)
-                        <option value="{{ $plato->id }}">{{ $plato->nombre }}</option>
+                    <option value="{{ $plato->id }}">{{ $plato->nombre }}</option>
                     @endforeach
                 </select>
 

@@ -25,115 +25,165 @@
 
     <main>
         <div class="location-info">
-            <h1>Local 2</h1>
-            <p>Av. Villareal 2012</p>
+            @if (auth()->check())
+            @php
+            $local = \App\Models\Local::find(auth()->user()->id_local);
+            @endphp
+            @if ($local)
+            <h1>{{ $local->nombre }}</h1>
+            <p>{{ $local->direccion }}</p>
+            @else
+            <h1>Local no encontrado</h1>
+            <p>Dirección no disponible</p>
+            @endif
+            @else
+            <h1>Usuario no autenticado</h1>
+            <p>Por favor, inicie sesión para ver la información del local.</p>
+            @endif
         </div>
-        
+
         <div class="form-container">
             @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
             @endif
-        
+
             <form action="{{ route('actualizar.stock') }}" method="POST">
                 @csrf
-        
+
                 <label for="tipoMovimiento">Movimiento: Venta</label>
                 <input type="hidden" id="tipoMovimiento" name="tipoMovimiento" value="venta">
-        
+
                 <label for="tipoItem">Tipo de Producto: Plato</label>
                 <input type="hidden" id="tipoItem" name="tipo" value="plato">
-        
+
                 <div class="plato-container">
+                    @if (auth()->check())
+                    @php
+                    $user = auth()->user();
+                    $localId = $user->id_local;
+                    $platos = \App\Models\Platos::where('id_local', $localId)->get();
+                    @endphp
+
                     @foreach ($platos as $plato)
-                        <div class="plato-item">
-                            <div class="checkbox-container">
-                                <input type="checkbox" id="plato_{{ $plato->id }}" name="productos[]" value="{{ $plato->id }}">
-                                <label for="plato_{{ $plato->id }}" class="plato-label">{{ $plato->nombre }}</label>
-                            </div>
-                            <input type="number" name="cantidad[{{ $plato->id }}]" value="1" min="1" class="cantidad-input">
+                    <div class="plato-item">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="plato_{{ $plato->id }}" name="productos[]" value="{{ $plato->id }}">
+                            <label for="plato_{{ $plato->id }}" class="plato-label">{{ $plato->nombre }}</label>
                         </div>
+                        <input type="number" name="cantidad[{{ $plato->id }}]" value="1" min="1" class="cantidad-input">
+                    </div>
                     @endforeach
+                    @else
+                    <p>Por favor, inicie sesión para ver los platos disponibles.</p>
+                    @endif
                 </div>
-        
+
                 <button type="submit" class="btn btn-primary">Actualizar</button>
             </form>
         </div>
-        
+
         <style>
             .location-info {
-                margin-bottom: 20px; /* Espacio debajo del bloque de información del local */
+                margin-bottom: 20px;
+                /* Espacio debajo del bloque de información del local */
             }
-        
+
             .form-container {
-                padding: 15px; /* Relleno alrededor del contenedor del formulario */
-                border: 1px solid #ccc; /* Borde alrededor del formulario */
-                border-radius: 5px; /* Bordes redondeados */
-                background-color: #f9f9f9; /* Color de fondo más claro */
+                padding: 15px;
+                /* Relleno alrededor del contenedor del formulario */
+                border: 1px solid #ccc;
+                /* Borde alrededor del formulario */
+                border-radius: 5px;
+                /* Bordes redondeados */
+                background-color: #f9f9f9;
+                /* Color de fondo más claro */
             }
-        
+
             .plato-container {
                 margin-top: 15px;
                 display: flex;
                 flex-direction: column;
-                gap: -10px; /* Espacio entre cada plato */
+                gap: -10px;
+                /* Espacio entre cada plato */
             }
-        
+
             .plato-item {
                 display: flex;
-                justify-content: space-between; /* Espacio entre los elementos */
-                align-items: center; /* Alinear elementos verticalmente */
+                justify-content: space-between;
+                /* Espacio entre los elementos */
+                align-items: center;
+                /* Alinear elementos verticalmente */
             }
-        
+
             .checkbox-container {
                 display: flex;
-                align-items: center; /* Alinear checkbox y label */
-                flex: 1; /* Permitir que el contenedor se expanda */
+                align-items: center;
+                /* Alinear checkbox y label */
+                flex: 1;
+                /* Permitir que el contenedor se expanda */
             }
-        
+
             .plato-label {
-                width: 19ch; /* Limitar el ancho del label a 12 caracteres */
-                white-space: nowrap; /* Evitar que el texto se divida en varias líneas */
-                overflow: hidden; /* Ocultar el desbordamiento */
-                text-overflow: ellipsis; /* Añadir "..." si el texto es demasiado largo */
-                margin-right: 10px; /* Espacio a la derecha del label */
+                width: 19ch;
+                /* Limitar el ancho del label a 12 caracteres */
+                white-space: nowrap;
+                /* Evitar que el texto se divida en varias líneas */
+                overflow: hidden;
+                /* Ocultar el desbordamiento */
+                text-overflow: ellipsis;
+                /* Añadir "..." si el texto es demasiado largo */
+                margin-right: 10px;
+                /* Espacio a la derecha del label */
             }
-        
+
             .plato-item input[type="checkbox"] {
-                margin-right: -70px; /* Espacio entre checkbox y label */
+                margin-right: -70px;
+                /* Espacio entre checkbox y label */
             }
-        
+
             .cantidad-input {
-                width: 100px; /* Ajustar el ancho del input de cantidad */
-                margin-left: 350px; /* Espacio a la izquierda */
+                width: 100px;
+                /* Ajustar el ancho del input de cantidad */
+                margin-left: 350px;
+                /* Espacio a la izquierda */
             }
-        
+
             .btn {
-                margin-top: 15px; /* Espacio por encima del botón */
-                padding: 10px 15px; /* Relleno del botón */
-                background-color: #007bff; /* Color de fondo del botón */
-                color: #fff; /* Color del texto del botón */
-                border: none; /* Sin borde */
-                border-radius: 5px; /* Bordes redondeados del botón */
-                cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+                margin-top: 15px;
+                /* Espacio por encima del botón */
+                padding: 10px 15px;
+                /* Relleno del botón */
+                background-color: #007bff;
+                /* Color de fondo del botón */
+                color: #fff;
+                /* Color del texto del botón */
+                border: none;
+                /* Sin borde */
+                border-radius: 5px;
+                /* Bordes redondeados del botón */
+                cursor: pointer;
+                /* Cambia el cursor al pasar sobre el botón */
             }
-        
+
             .btn:hover {
-                background-color: #0056b3; /* Color más oscuro al pasar el cursor */
+                background-color: #0056b3;
+                /* Color más oscuro al pasar el cursor */
             }
 
 
             .stock-table .ventas {
-    background-color: rgba(255, 0, 0, 0.3); /* Color rojo claro */
-}
+                background-color: rgba(255, 0, 0, 0.3);
+                /* Color rojo claro */
+            }
 
-.stock-table .stock-final {
-    background-color: rgba(0, 128, 0, 0.3); /* Color verde suave */
-}
-
+            .stock-table .stock-final {
+                background-color: rgba(0, 128, 0, 0.3);
+                /* Color verde suave */
+            }
         </style>
-        
+
 
         <div class="stock-table">
             <table>
@@ -141,23 +191,30 @@
                     <tr>
                         <th>Insumo</th>
                         <th>Stock Inicial</th>
-                        <th class=>Ingresos</th>
-                        <th class="ventas">Ventas</th>
-                        <th class="stock-final">Stock Final</th>
+                        <th>Ingresos</th>
+                        <th>Ventas</th>
+                        <th>Stock Final</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($insumos as $insumo)
+                    @foreach ($localInsumos as $localInsumo)
                     <tr>
-                        <td>{{ $insumo->nombre }}</td>
-                        <td>{{ $insumo->stock_inicial }}</td>
-                        <td>{{ $insumo->ingresos }}</td>
-                        <td class="ventas">{{ $insumo->ventas }}</td>
-                        <td class="stock-final">{{ $insumo->stock_final }}</td>
+                        <td>{{ $localInsumo->insumo->nombre }}</td>
+                        <td>{{ $localInsumo->insumo->stock_inicial }}</td>
+                        <td>{{ $localInsumo->ingresos ?? 0}} </td>
+                        <td>
+                            @php
+                            $cantidadTotal = \App\Models\Movimiento::where('insumo_id', $localInsumo->id)->sum('cantidad') ?? 0;
+                            @endphp
+                            {{ $cantidadTotal }}
+                        </td>
+
+                        <td>{{ $localInsumo->insumo->stock_final }}</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+
         </div>
 
         <div class="alerta" style="display: none;">

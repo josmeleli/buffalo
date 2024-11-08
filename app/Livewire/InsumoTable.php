@@ -10,6 +10,7 @@ class InsumoTable extends Component
 {
     public $search = '';
     public $filter = 'insumo';
+
     public function render()
     {
         if ($this->filter === 'insumo') {
@@ -25,6 +26,6 @@ class InsumoTable extends Component
 
     public function updatedFilter($value)
     {
-        $this->reset('search'); // Reiniciar el campo de búsqueda al cambiar el filtro
+        $this->reset('search'); 
     }
 }
